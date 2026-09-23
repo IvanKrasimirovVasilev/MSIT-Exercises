@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask CRUD REST API</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+
+        code {
+            background: #f2f2f2;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #f2f2f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Flask CRUD REST API</h1>
+
+    <p>
+        This project is a simple REST API for practicing Flask
+        and the HTTP methods GET, POST, PUT, PATCH, and DELETE.
+    </p>
+
+    <h2>Users</h2>
+
+    <p>Each user has three properties:</p>
+
+    <pre>
+{
+    "id": 1,
+    "username": "alice",
+    "email": "alice@email.com"
+}
+    </pre>
+
+    <h2>API Endpoints</h2>
+
+    <table>
+        <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td><code>/users</code></td>
+            <td>Get all users</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td><code>/users/&lt;id&gt;</code></td>
+            <td>Get one user by ID</td>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td><code>/users</code></td>
+            <td>Create a new user</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td><code>/users/&lt;id&gt;</code></td>
+            <td>Update the complete user</td>
+        </tr>
+
+        <tr>
+            <td>PATCH</td>
+            <td><code>/users/&lt;id&gt;</code></td>
+            <td>Update only selected user fields</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td><code>/users/&lt;id&gt;</code></td>
+            <td>Delete a user</td>
+        </tr>
+    </table>
+
+
+    <h2>GET</h2>
+
+    <p>
+        GET is used to retrieve data without changing it.
+    </p>
+
+    <pre>GET /users</pre>
+
+    <p>Returns all users.</p>
+
+    <pre>GET /users/2</pre>
+
+    <p>Returns the user with ID 2.</p>
+
+
+    <h2>POST</h2>
+
+    <p>
+        POST is used to create a new user.
+    </p>
+
+    <pre>
+POST /users
+
+{
+    "username": "ivan",
+    "email": "ivan@email.com"
+}
+    </pre>
+
+    <p>
+        The API checks that username and email are provided
+        and that they do not already exist.
+    </p>
+
+    <p>
+        A successfully created user returns
+        <code>201 Created</code>.
+    </p>
+
+
+    <h2>PUT</h2>
+
+    <p>
+        PUT is used to update an existing user.
+        In this project both username and email are required.
+    </p>
+
+    <pre>
+PUT /users/2
+
+{
+    "username": "robert",
+    "email": "robert@email.com"
+}
+    </pre>
+
+
+    <h2>PATCH</h2>
+
+    <p>
+        PATCH is used to update only selected fields.
+        Unlike PUT, it is not necessary to send all user data.
+    </p>
+
+    <pre>
+PATCH /users/2
+
+{
+    "email": "bob.new@email.com"
+}
+    </pre>
+
+    <p>
+        Only the email is changed. The username remains unchanged.
+    </p>
+
+
+    <h2>DELETE</h2>
+
+    <p>
+        DELETE removes a user.
+    </p>
+
+    <pre>DELETE /users/2</pre>
+
+    <p>
+        If the user does not exist, the API returns
+        <code>404 Not Found</code>.
+    </p>
+
+
+    <h2>HTTP Status Codes</h2>
+
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Meaning</th>
+        </tr>
+
+        <tr>
+            <td>200 OK</td>
+            <td>The request was successful</td>
+        </tr>
+
+        <tr>
+            <td>201 Created</td>
+            <td>A new resource was successfully created</td>
+        </tr>
+
+        <tr>
+            <td>400 Bad Request</td>
+            <td>The request contains invalid or missing data</td>
+        </tr>
+
+        <tr>
+            <td>404 Not Found</td>
+            <td>The requested user does not exist</td>
+        </tr>
+
+        <tr>
+            <td>409 Conflict</td>
+            <td>The username or email already exists</td>
+        </tr>
+    </table>
+
+
+    <h2>Testing with curl</h2>
+
+    <p>Get all users:</p>
+
+    <pre>curl.exe http://127.0.0.1:5001/users</pre>
+
+    <p>Create a user:</p>
+
+    <pre>curl.exe -X POST http://127.0.0.1:5001/users -H "Content-Type: application/json" -d '{\"username\":\"ivan\",\"email\":\"ivan@email.com\"}'</pre>
+
+    <p>Update only the email:</p>
+
+    <pre>curl.exe -X PATCH http://127.0.0.1:5001/users/2 -H "Content-Type: application/json" -d '{\"email\":\"new@email.com\"}'</pre>
+
+    <p>Delete a user:</p>
+
+    <pre>curl.exe -X DELETE http://127.0.0.1:5001/users/2</pre>
+
+</body>
+</html>
