@@ -129,6 +129,8 @@ def main():
     green_score, red_score = 0, 0
     green_y_fac, red_y_fac = 0, 0
 
+    waiting_for_space = False
+
     while running:
         screen.fill(BLACK)
 
@@ -145,6 +147,8 @@ def main():
                     green_y_fac = 1
                 if event.key == pygame.K_w:
                     green_y_fac = -1
+                if event.key == pygame.K_SPACE:
+                    waiting_for_space = False
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     red_y_fac = 0
@@ -159,7 +163,10 @@ def main():
         # Updating the objects
         green_player.update(green_y_fac)
         red_player.update(red_y_fac)
-        point = ball.update()
+
+        point = 0
+        if not waiting_for_space:
+            point = ball.update()
 
         # -1 -> Player_1 has scored
         # +1 -> Player_2 has scored
@@ -174,6 +181,7 @@ def main():
         # So, we reset it's position
         if point:
             ball.reset()
+            waiting_for_space = True
 
         # Displaying the objects on the screen
         green_player.display()
